@@ -1,10 +1,10 @@
 // ===========================================================
-// CS Engenharia — Scripts Otimizados
+// CS Engenharia — Scripts Otimizados (Compatível com J6/Antigos)
 // ===========================================================
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // --- Menu Mobile Acessível ---
+  // --- Menu Mobile ---
   const menuToggle = document.querySelector('.menu-toggle');
   const navMenu = document.querySelector('.nav-menu');
 
@@ -12,24 +12,31 @@ document.addEventListener('DOMContentLoaded', () => {
     menuToggle.addEventListener('click', () => {
       const isOpen = navMenu.classList.toggle('active');
       menuToggle.setAttribute('aria-expanded', isOpen);
-      menuToggle.innerHTML = isOpen ? '✕' : '☰'; // Alterna ícone
+      menuToggle.innerHTML = isOpen ? '✕' : '☰';
     });
   }
 
-  // --- Animação de Scroll (Intersection Observer) ---
-  // Mais performático que ouvir o evento 'scroll'
+  // --- CORREÇÃO CRÍTICA: Animação de Scroll com Fallback ---
   const fadeElements = document.querySelectorAll('.fade-in');
-  const appearOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
 
-  const appearOnScroll = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target); // Para de observar após aparecer
-    });
-  }, appearOptions);
+  // Verifica se o navegador suporta IntersectionObserver (O J6 antigo pode não suportar)
+  if ('IntersectionObserver' in window) {
+    const appearOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
 
-  fadeElements.forEach(el => appearOnScroll.observe(el));
+    const appearOnScroll = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      });
+    }, appearOptions);
+
+    fadeElements.forEach(el => appearOnScroll.observe(el));
+  } else {
+    // SE O NAVEGADOR FOR ANTIGO: Força tudo a ficar visível imediatamente
+    fadeElements.forEach(el => el.classList.add('visible'));
+    document.body.classList.add('no-js-animation'); // Classe auxiliar para CSS
+  }
 
   // --- Filtros de Portfólio ---
   const filterBtns = document.querySelectorAll('.filter-btn');
@@ -38,16 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (filterBtns.length > 0) {
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        // Remove active de todos
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-
         const filterValue = btn.getAttribute('data-filter');
 
         portfolioItems.forEach(item => {
           if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
             item.style.display = 'block';
-             // Pequeno timeout para permitir a animação de entrada se desejar adicionar
             setTimeout(() => item.style.opacity = '1', 50);
           } else {
             item.style.display = 'none';
@@ -57,8 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-
-  // --- Lightbox Simples (Opcional, se mantiver) ---
+  
+  // --- Lightbox (Mantido igual) ---
   const lightbox = document.getElementById('lightbox');
   if (lightbox) {
       const lightboxImg = document.getElementById('lightbox-img');
@@ -67,9 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       document.querySelectorAll('.portfolio-item').forEach(item => {
           item.addEventListener('click', (e) => {
-              // Evita abrir se clicar em links dentro do item, se houver
               if (e.target.tagName === 'A') return;
-
               const img = item.querySelector('img');
               const video = item.querySelector('video');
 
@@ -88,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
           });
       });
 
-      // Fechar Lightbox
       if (closeBtn) {
           closeBtn.addEventListener('click', () => {
               lightbox.classList.remove('active');

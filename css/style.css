@@ -536,15 +536,111 @@ ul.gold-list li::before {
   padding-top: 3rem;
   border-top: 1px solid #eee;
 }
+/* ---------- ANIMAÇÕES CORRIGIDAS ---------- */
+/* Estado inicial: invisível e levemente deslocado */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  will-change: opacity, transform; /* Otimização para Androids antigos */
+}
 
-/* Fallback para navegadores antigos ou se o JS falhar */
+/* Estado final: visível e na posição original */
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* SEGURANÇA: Se o JS falhar ou for desativado, mostra tudo */
 @media (scripting: none) {
-  .fade-in {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
+  .fade-in { opacity: 1 !important; transform: translateY(0) !important; }
+}
+body.no-js-animation .fade-in {
+  opacity: 1 !important; transform: translateY(0) !important;
+}
+
+
+/* ---------- RESPONSIVIDADE AVANÇADA ---------- */
+
+/* Tablets e iPads (até 900px) */
+@media (max-width: 900px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas no tablet, não 1 */
+  }
+  .section-title {
+    font-size: 2rem;
   }
 }
 
-/* Se o navegador for muito antigo e não entender IntersectionObserver,
-   garantimos que o conteúdo seja visível por padrão removendo a dependência da classe .visible
-   apenas para a opacidade inicial se você estiver usando opacity: 0 no código original. */
+/* Celulares e Tablets Pequenos (até 768px) */
+@media (max-width: 768px) {
+  .nav-menu {
+    position: fixed;
+    top: 70px;
+    right: -100%;
+    background: var(--white);
+    width: 85%; /* Um pouco mais largo para evitar toques acidentais fora */
+    height: calc(100vh - 70px);
+    flex-direction: column;
+    padding: 2rem;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    transition: 0.4s ease;
+    overflow-y: auto; /* Permite rolar o menu se for muito alto */
+  }
+
+  .nav-menu.active {
+    right: 0;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .grid-2, .grid-3 {
+    grid-template-columns: 1fr; /* 1 coluna no celular */
+    gap: 2rem;
+  }
+
+  /* Ajuste crítico para o Artigo no Mobile */
+  .article-card {
+    padding: 1.5rem; /* Reduzido de 3rem para 1.5rem */
+  }
+  
+  .article-content h1, 
+  .hero-title {
+    font-size: 1.8rem !important; /* Títulos menores */
+  }
+  
+  .wrapper {
+    padding: 40px 0; /* Menos espaço branco vertical */
+    width: 92%; /* Aproveita mais a largura da tela */
+  }
+}
+
+/* Celulares Antigos e Estreitos (Galaxy J6, iPhone SE - até 480px) */
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 1.5rem !important;
+  }
+  
+  .article-card {
+    padding: 1rem !important; /* Padding mínimo para ganhar espaço */
+  }
+  
+  .article-content {
+    font-size: 0.95rem; /* Texto levemente menor para leitura confortável */
+    text-align: left; /* Evita buracos no texto justificado */
+  }
+  
+  /* Força imagens a não estourarem a tela */
+  img, video, iframe {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Ajuste no cabeçalho para não quebrar o logo */
+  .logo {
+    height: 40px; /* Logo menor no mobile */
+    width: auto;
+  }
+}
