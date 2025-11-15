@@ -644,3 +644,39 @@ body.no-js-animation .fade-in {
     width: auto;
   }
 }
+/* ===========================================================
+   CORREÇÃO DA TELA DE CONTATO (RESPONSIVIDADE MOBILE)
+   =========================================================== */
+
+@media (max-width: 768px) {
+  
+  /* 1. Corrige o problema do "pedaço faltando" */
+  /* A regra original exigia minmax(450px), que é maior que a tela do celular */
+  .grid-2 {
+    grid-template-columns: 1fr !important; /* Ocupa apenas o espaço disponível (100%) */
+    display: flex !important;              /* Muda para flexbox vertical para garantir empilhamento */
+    flex-direction: column !important;
+    gap: 2rem !important;
+    width: 100% !important;
+  }
+
+  /* 2. Ajuste dos Cards de Contato */
+  .card {
+    padding: 1.5rem !important; /* Reduz o espaço interno para caber mais texto */
+    width: 100% !important;     /* Garante que o card não seja maior que a tela */
+    box-sizing: border-box !important; /* Garante que o padding não aumente a largura total */
+  }
+
+  /* 3. Quebra o e-mail longo para não estourar o card */
+  .card p, .card strong {
+    word-break: break-word !important; /* Força a quebra de palavras longas (como o e-mail) */
+    overflow-wrap: break-word !important;
+    font-size: 0.95rem; /* Ajuste leve no tamanho da fonte */
+  }
+
+  /* 4. Ajuste nos ícones (📍, 📞, ✉️) para não ficarem espremidos */
+  .card div:first-child {
+    font-size: 1.5rem !important; /* Reduz levemente o tamanho do ícone */
+    min-width: 40px; /* Garante espaço fixo para o ícone */
+  }
+}
