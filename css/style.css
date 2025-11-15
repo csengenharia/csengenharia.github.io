@@ -419,12 +419,14 @@ ul {
   }
 }
 
+
+
 /* ---------- ANIMAÇÕES (JS) ---------- */
 .fade-in {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  opacity: 1;
+  transform: translateY(0);
 }
+
 
 .fade-in.visible {
   opacity: 1;
@@ -534,3 +536,15 @@ ul.gold-list li::before {
   padding-top: 3rem;
   border-top: 1px solid #eee;
 }
+
+/* Fallback para navegadores antigos ou se o JS falhar */
+@media (scripting: none) {
+  .fade-in {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+}
+
+/* Se o navegador for muito antigo e não entender IntersectionObserver,
+   garantimos que o conteúdo seja visível por padrão removendo a dependência da classe .visible
+   apenas para a opacidade inicial se você estiver usando opacity: 0 no código original. */
