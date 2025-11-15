@@ -680,3 +680,55 @@ body.no-js-animation .fade-in {
     min-width: 40px; /* Garante espaço fixo para o ícone */
   }
 }
+/* ===========================================================
+   AJUSTE FINO PARA GALAXY J6 (e telas até 375px)
+   =========================================================== */
+
+@media (max-width: 375px) {
+
+  /* 1. Ganhar espaço lateral */
+  /* No J6, 90% de largura deixa muita borda branca. Vamos usar 94% */
+  .wrapper {
+    width: 94% !important;
+    padding: 40px 0 !important; /* Menos espaço vertical entre seções */
+  }
+
+  /* 2. Títulos mais compactos */
+  /* 2.5rem é gigante no J6. Vamos reduzir para caber em 2 linhas */
+  .hero-title {
+    font-size: 1.75rem !important; 
+    line-height: 1.2 !important;
+  }
+  
+  .section-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* 3. Otimização dos Cartões (Contato e Serviços) */
+  .card {
+    padding: 1.25rem 1rem !important; /* Menos "gordura" interna */
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* 4. Correção Específica do E-mail no J6 */
+  /* O e-mail precisa quebrar forçadamente ou sai da tela */
+  .card p {
+    font-size: 0.9rem !important;
+    word-break: break-all !important; /* Quebra o e-mail em qualquer caractere */
+  }
+
+  /* 5. Ajuste do Menu no J6 */
+  /* O menu lateral precisa ser mais largo para não parecer uma tira fina */
+  .nav-menu {
+    width: 90% !important;
+  }
+
+  /* 6. Performance (Opcional mas recomendado para J6) */
+  /* Remove sombras pesadas para a rolagem ficar mais leve no processador antigo */
+  .card, .cta {
+    box-shadow: none !important; 
+    border: 1px solid #e0e0e0 !important; /* Troca sombra por borda simples */
+  }
+}
